@@ -1,4 +1,4 @@
-import { Grid, GridCellRenderer } from 'react-virtualized';
+import { Collection, CollectionCellRenderer } from 'react-virtualized';
 import { MovieCard } from './MovieCard';
 
 interface ContentProps {
@@ -21,14 +21,15 @@ interface ContentProps {
 }
 
 export function Content({ selectedGenre, movies }: ContentProps) {
-  const cellRenderer: GridCellRenderer = ({ columnIndex, key, style }) => {
+  const listRowRender: CollectionCellRenderer = ({ index, key, style }) => {
     return (
-      <div key={key} style={style} className='movie-list'>
+      <div key={key} style={style} className='movies-list'>
         <MovieCard
-          title={movies[columnIndex].Title}
-          poster={movies[columnIndex].Poster}
-          runtime={movies[columnIndex].Runtime}
-          rating={movies[columnIndex].Ratings[0].Value}
+          poster={movies[index].Poster}
+          rating={movies[index].Ratings[0].Value}
+          runtime={movies[index].Runtime}
+          title={movies[index].Title}
+          key={key}
         />
       </div>
     );
@@ -44,15 +45,19 @@ export function Content({ selectedGenre, movies }: ContentProps) {
 
       {/* virtualização */}
       <main>
-        <div className='movies-list'>
-          <Grid
-            autoHeight
-            autoWidth
-            overscanRowCount={3}
-            rowCount={movies.length}
-            cellRenderer={cellRenderer}
-          />
-        </div>
+        <Collection
+          height={400}
+          width={800}
+          overscanRowCount={3}
+          cellCount={movies.length}
+          cellRenderer={listRowRender}
+          cellSizeAndPositionGetter={({ index }) => ({
+            width: 400,
+            height: 200,
+            x: (index % 4) * 300,
+            y: Math.floor(index / 4) * 100,
+          })}
+        />
       </main>
     </div>
   );
