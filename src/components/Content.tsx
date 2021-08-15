@@ -1,4 +1,8 @@
-import { Collection, CollectionCellRenderer } from 'react-virtualized';
+import {
+  Collection,
+  CollectionCellRenderer,
+  CollectionCellSizeAndPositionGetter,
+} from 'react-virtualized';
 import { MovieCard } from './MovieCard';
 
 interface ContentProps {
@@ -21,7 +25,7 @@ interface ContentProps {
 }
 
 export function Content({ selectedGenre, movies }: ContentProps) {
-  const listRowRender: CollectionCellRenderer = ({ index, key, style }) => {
+  const collectionCellRender: CollectionCellRenderer = ({ index, key, style }) => {
     return (
       <div key={key} style={style} className='movies-list'>
         <MovieCard
@@ -34,6 +38,13 @@ export function Content({ selectedGenre, movies }: ContentProps) {
       </div>
     );
   };
+
+  const sizeAndpositionGetter: CollectionCellSizeAndPositionGetter = ({ index }) => ({
+    width: 400,
+    height: 200,
+    x: (index % 4) * 300,
+    y: Math.floor(index / 4) * 100,
+  });
 
   return (
     <div className='container'>
@@ -50,13 +61,8 @@ export function Content({ selectedGenre, movies }: ContentProps) {
           width={800}
           overscanRowCount={3}
           cellCount={movies.length}
-          cellRenderer={listRowRender}
-          cellSizeAndPositionGetter={({ index }) => ({
-            width: 400,
-            height: 200,
-            x: (index % 4) * 300,
-            y: Math.floor(index / 4) * 100,
-          })}
+          cellRenderer={collectionCellRender}
+          cellSizeAndPositionGetter={sizeAndpositionGetter}
         />
       </main>
     </div>
