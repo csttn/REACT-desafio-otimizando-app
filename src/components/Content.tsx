@@ -59,10 +59,10 @@ export function Content({ selectedGenre, movies }: ContentProps) {
         <Collection
           height={400}
           width={800}
-          overscanRowCount={3}
           cellCount={movies.length}
           cellRenderer={collectionCellRender}
           cellSizeAndPositionGetter={sizeAndpositionGetter}
+          horizontalOverscanSize={2}
         />
       </main>
     </div>
