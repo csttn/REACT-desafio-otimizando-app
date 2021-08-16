@@ -1,4 +1,5 @@
 import {
+  AutoSizer,
   Collection,
   CollectionCellRenderer,
   CollectionCellSizeAndPositionGetter,
@@ -40,10 +41,10 @@ export function Content({ selectedGenre, movies }: ContentProps) {
   };
 
   const sizeAndpositionGetter: CollectionCellSizeAndPositionGetter = ({ index }) => ({
-    width: 400,
-    height: 200,
-    x: (index % 4) * 300,
-    y: Math.floor(index / 4) * 100,
+    width: window.screen.width / 2,
+    height: window.screen.height / 2,
+    x: (index % 6) * 400,
+    y: Math.floor(index / 6) * 400,
   });
 
   return (
@@ -56,14 +57,20 @@ export function Content({ selectedGenre, movies }: ContentProps) {
 
       {/* virtualização */}
       <main>
-        <Collection
-          height={400}
-          width={800}
-          cellCount={movies.length}
-          cellRenderer={collectionCellRender}
-          cellSizeAndPositionGetter={sizeAndpositionGetter}
-          horizontalOverscanSize={2}
-        />
+        <AutoSizer>
+          {({ height, width }) => (
+            <Collection
+              height={window.screen.height / 2}
+              width={width}
+              cellCount={movies.length}
+              cellRenderer={collectionCellRender}
+              cellSizeAndPositionGetter={sizeAndpositionGetter}
+              horizontalOverscanSize={2}
+              autoHeight
+              autoWidth
+            />
+          )}
+        </AutoSizer>
       </main>
     </div>
   );
